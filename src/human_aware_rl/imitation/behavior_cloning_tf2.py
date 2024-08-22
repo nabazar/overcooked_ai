@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 from ray.rllib.policy import Policy as RllibPolicy
 from tensorflow import keras
-from tensorflow.compat.v1.keras.backend import get_session, set_session
+# from tensorflow.compat.v1.keras.backend import get_session, set_session
 from tensorflow.python.keras.backend import get_session, set_session
 
 from human_aware_rl.data_dir import DATA_DIR
