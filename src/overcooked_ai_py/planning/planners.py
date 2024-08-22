@@ -1465,61 +1465,61 @@ class MediumLevelActionManager(object):
 
 
 # # Deprecated, since agent-level dynamic planning is no longer used
-# class MediumLevelPlanner(object):
-#     """
-#     A planner that computes optimal plans for two agents to deliver a certain number of dishes
-#     in an OvercookedGridworld using medium level actions (single motion goals) in the corresponding
-#     A* search problem.
-#     """
-#
-#     def __init__(self, mdp, mlp_params, ml_action_manager=None):
-#         self.mdp = mdp
-#         self.params = mlp_params
-#         self.ml_action_manager = ml_action_manager if ml_action_manager else MediumLevelActionManager(mdp, mlp_params)
-#         self.jmp = self.ml_action_manager.joint_motion_planner
-#         self.mp = self.jmp.motion_planner
-#
-#     @staticmethod
-#     def from_action_manager_file(filename):
-#         mlp_action_manager = load_saved_action_manager(filename)
-#         mdp = mlp_action_manager.mdp
-#         params = mlp_action_manager.params
-#         return MediumLevelPlanner(mdp, params, mlp_action_manager)
-#
-#     @staticmethod
-#     def from_pickle_or_compute(mdp, mlp_params, custom_filename=None, force_compute=False, info=True):
-#         assert isinstance(mdp, OvercookedGridworld)
-#
-#         filename = custom_filename if custom_filename is not None else mdp.layout_name + "_am.pkl"
-#
-#         if force_compute:
-#             return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
-#
-#         try:
-#             mlp = MediumLevelPlanner.from_action_manager_file(filename)
-#
-#             if mlp.ml_action_manager.params != mlp_params or mlp.mdp != mdp:
-#                 print("Mlp with different params or mdp found, computing from scratch")
-#                 return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
-#
-#         except (FileNotFoundError, ModuleNotFoundError, EOFError, AttributeError) as e:
-#             print("Recomputing planner due to:", e)
-#             return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
-#
-#         if info:
-#             print("Loaded MediumLevelPlanner from {}".format(os.path.join(PLANNERS_DIR, filename)))
-#         return mlp
-#
-#     @staticmethod
-#     def compute_mlp(filename, mdp, mlp_params):
-#         final_filepath = os.path.join(PLANNERS_DIR, filename)
-#         print("Computing MediumLevelPlanner to be saved in {}".format(final_filepath))
-#         start_time = time.time()
-#         mlp = MediumLevelPlanner(mdp, mlp_params=mlp_params)
-#         print("It took {} seconds to create mlp".format(time.time() - start_time))
-#         mlp.ml_action_manager.save_to_file(final_filepath)
-#         return mlp
-#
+class MediumLevelPlanner(object):
+    """
+    A planner that computes optimal plans for two agents to deliver a certain number of dishes
+    in an OvercookedGridworld using medium level actions (single motion goals) in the corresponding
+    A* search problem.
+    """
+
+    def __init__(self, mdp, mlp_params, ml_action_manager=None):
+        self.mdp = mdp
+        self.params = mlp_params
+        self.ml_action_manager = ml_action_manager if ml_action_manager else MediumLevelActionManager(mdp, mlp_params)
+        self.jmp = self.ml_action_manager.joint_motion_planner
+        self.mp = self.jmp.motion_planner
+
+    @staticmethod
+    def from_action_manager_file(filename):
+        mlp_action_manager = load_saved_action_manager(filename)
+        mdp = mlp_action_manager.mdp
+        params = mlp_action_manager.params
+        return MediumLevelPlanner(mdp, params, mlp_action_manager)
+
+    @staticmethod
+    def from_pickle_or_compute(mdp, mlp_params, custom_filename=None, force_compute=False, info=True):
+        assert isinstance(mdp, OvercookedGridworld)
+
+        filename = custom_filename if custom_filename is not None else mdp.layout_name + "_am.pkl"
+
+        if force_compute:
+            return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
+
+        try:
+            mlp = MediumLevelPlanner.from_action_manager_file(filename)
+
+            if mlp.ml_action_manager.params != mlp_params or mlp.mdp != mdp:
+                print("Mlp with different params or mdp found, computing from scratch")
+                return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
+
+        except (FileNotFoundError, ModuleNotFoundError, EOFError, AttributeError) as e:
+            print("Recomputing planner due to:", e)
+            return MediumLevelPlanner.compute_mlp(filename, mdp, mlp_params)
+
+        if info:
+            print("Loaded MediumLevelPlanner from {}".format(os.path.join(PLANNERS_DIR, filename)))
+        return mlp
+
+    @staticmethod
+    def compute_mlp(filename, mdp, mlp_params):
+        final_filepath = os.path.join(PLANNERS_DIR, filename)
+        print("Computing MediumLevelPlanner to be saved in {}".format(final_filepath))
+        start_time = time.time()
+        mlp = MediumLevelPlanner(mdp, mlp_params=mlp_params)
+        print("It took {} seconds to create mlp".format(time.time() - start_time))
+        mlp.ml_action_manager.save_to_file(final_filepath)
+        return mlp
+
 # Deprecated.
 # def get_successor_states(self, start_state):
 #     """Successor states for medium-level actions are defined as
